@@ -11,7 +11,7 @@ source:
 
 build:
   number: 0
-  # skip: True  # [py>39]
+  skip: True  # [py<39]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
   entry_points:
     - waitress-serve = waitress.runner:run
