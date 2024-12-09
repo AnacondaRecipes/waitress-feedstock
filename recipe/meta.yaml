@@ -36,6 +36,9 @@ test:
   commands:
     - waitress-serve --help
     - pip check
+    # Upstream utilizes tox for testing which we dont currently support
+    # - tox -e py
+
 
 about:
   home: https://github.com/Pylons/waitress
