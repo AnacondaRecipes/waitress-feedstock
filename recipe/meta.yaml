@@ -1,5 +1,5 @@
 {% set name = "waitress" %}
-{% set version = "2.0.0" %}
+{% set version = "3.0.2" %}
 
 package:
   name: {{ name|lower }}
@@ -7,27 +7,40 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 69e1f242c7f80273490d3403c3976f3ac3b26e289856936d1f620ed48f321897
+  sha256: 682aaaf2af0c44ada4abfb70ded36393f0e307f4ab9456a215ce0020baefc31f
 
 build:
-  noarch: python
   number: 0
-  script: "{{ PYTHON }} -m pip install . -vv"
+  skip: True  # [py<39]
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
   entry_points:
     - waitress-serve = waitress.runner:run
 
 requirements:
   build:
-    - python >=2.7
+    - python
     - pip
+  host:
+    - python
+    - setuptools
+    - pip
+    - wheel
   run:
-    - python >=2.7
+    - python
 
 test:
+  requires:
+    - pip
+    - pytest
+  source_files:
+    - tests
   imports:
     - waitress
   commands:
+    - pip check
+    - pytest -v tests
     - waitress-serve --help
+
 
 about:
   home: https://github.com/Pylons/waitress
@@ -41,9 +54,10 @@ about:
     in the Python standard library. It runs on CPython on Unix and Windows under
     Python 2.7+ and Python 3.3+. It is also known to run on PyPy 1.6.0+ on UNIX.
     It supports HTTP/1.0 and HTTP/1.1.
-  doc_url: http://docs.pylonsproject.org/projects/waitress/en/latest/
+  doc_url: http://docs.pylonsproject.org/projects/waitress
   dev_url: https://github.com/Pylons/waitress
 
 extra:
   recipe-maintainers:
     - carlodri
+    - arishamays1
